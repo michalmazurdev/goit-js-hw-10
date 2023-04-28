@@ -39,25 +39,17 @@ function renderCountries(data) {
     Notify.info('Too many matches found. Please enter a more spcific name.');
   }
 }
+
 inputEl.addEventListener('input', event => {
-  console.log(event.target.value);
-  fetchCountries(event.target.value)
-    .then(data => {
-      console.log(data);
-      renderCountries(data);
-    })
-    .catch(error => {
-      console.log(error, 'oups, something went wrong');
-      Notify.failure('Oops, there is no country with that name');
-    });
+  console.log(sevent.target.value);
 });
 
-// fetchCountries('poland')
-//   .then(data => {
-//     console.log(data);
-//     renderCountries(data);
-//   })
-//   .catch(error => {
-//     console.log(error, 'oups, something went wrong');
-//     Notify.failure('Oops, there is no country with that name');
-//   });
+fetchCountries('poland')
+  .then(data => {
+    console.log(data);
+    renderCountries(data);
+  })
+  .catch(error => {
+    console.log(error, 'oups, something went wrong');
+    Notify.failure('Oops, there is no country with that name');
+  });
