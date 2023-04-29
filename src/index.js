@@ -4,18 +4,21 @@ const DEBOUNCE_DELAY = 300;
 const inputEl = document.getElementById('search-box');
 const listEl = document.querySelector('.country-list');
 const countryInfoEl = document.querySelector('.country-info');
+const bodyEl = document.querySelector('body');
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix';
 function renderCountries(data) {
   if (data.length === 1) {
     let country = data[0];
     let languages = Object.values(country.languages).join(', ');
-    countryInfoEl.innerHTML = `<h2><img height=36 src=${country.flags.svg} alt='Flag of ${country.name.official}'>${country.name.official}</h2>
+    countryInfoEl.innerHTML = `
+    <h2><img height=36 src=${country.flags.svg} alt='Flag of ${country.name.official}'>${country.name.official}</h2>
     <ul>
       <li><b>Capital:</b> ${country.capital}</li>
       <li><b>Population:</b> ${country.population}</li>
       <li><b>Languages:</b> ${languages}</li>
     </ul>`;
+    bodyEl.style.backgroundImage = `linear-gradient(rgba(244, 244, 244, 0.9), rgba(244, 244, 244, 0.9)),url(${country.flags.svg})`;
   } else if (data.length > 1 && data.length < 11) {
     let markup = ``;
     for (let country of data) {
@@ -32,9 +35,11 @@ inputEl.addEventListener(
   debounce(event => {
     countryInfoEl.innerHTML = '';
     listEl.innerHTML = '';
+    bodyEl.style.backgroundImage = '';
     fetchCountries(event.target.value.trim())
       .then(data => {
         renderCountries(data);
+        console.log(data);
       })
       .catch(error => {
         if (event.target.value === '') {
