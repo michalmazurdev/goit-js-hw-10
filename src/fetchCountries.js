@@ -9,12 +9,3 @@ export function fetchCountries(name) {
     return response.json();
   });
 }
-// fetchCountries('s')
-//   .then(data => {
-//     console.log(data);
-//     renderCountries(data);
-//   })
-//   .catch(error => {
-//     console.log(error, 'oups, something went wrong');
-//     Notify.failure('Oops, there is no country with that name');
-//   });
