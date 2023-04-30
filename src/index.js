@@ -1,12 +1,18 @@
 import './css/styles.css';
 import { fetchCountries } from './fetchCountries.js';
+import debounce from 'lodash.debounce';
+import { Notify } from 'notiflix';
+
 const DEBOUNCE_DELAY = 300;
 const inputEl = document.getElementById('search-box');
 const listEl = document.querySelector('.country-list');
 const countryInfoEl = document.querySelector('.country-info');
 const bodyEl = document.querySelector('body');
-import debounce from 'lodash.debounce';
-import { Notify } from 'notiflix';
+bodyEl.style.height = `${window.innerHeight}px`;
+window.addEventListener('resize', event => {
+  bodyEl.style.height = `${window.innerHeight}px`;
+});
+
 function renderCountries(data) {
   if (data.length === 1) {
     let country = data[0];
@@ -18,11 +24,11 @@ function renderCountries(data) {
       <li><b>Population:</b> ${country.population}</li>
       <li><b>Languages:</b> ${languages}</li>
     </ul>`;
-    bodyEl.style.backgroundImage = `linear-gradient(rgba(244, 244, 244, 0.9), rgba(244, 244, 244, 0.9)),url(${country.flags.svg})`;
+    bodyEl.style.backgroundImage = `linear-gradient(rgba(244, 244, 244, 0.5), rgba(244, 244, 244, 0.5)),url(${country.flags.png})`;
   } else if (data.length > 1 && data.length < 11) {
     let markup = ``;
     for (let country of data) {
-      markup += `<li><img height=19px src=${country.flags.svg} alt='Flag of ${country.name.official}'>${country.name.official}</li>`;
+      markup += `<li id='listItem' ><img height=19px src=${country.flags.svg} alt='Flag of ${country.name.official}'><button id='countryButton'>${country.name.official}</button></li>`;
       listEl.innerHTML = markup;
     }
   } else {
@@ -39,7 +45,6 @@ inputEl.addEventListener(
     fetchCountries(event.target.value.trim())
       .then(data => {
         renderCountries(data);
-        console.log(data);
       })
       .catch(error => {
         if (event.target.value === '') {
@@ -50,3 +55,15 @@ inputEl.addEventListener(
       });
   }, DEBOUNCE_DELAY)
 );
+
+document.querySelector('.country-list').addEventListener('click', event => {
+  if (event.target.nodeName !== 'BUTTON') {
+    return;
+  }
+  inputEl.value = event.target.innerText;
+  listEl.innerHTML = '';
+  bodyEl.style.backgroundImage = '';
+  fetchCountries(inputEl.value.trim()).then(data => {
+    renderCountries(data);
+  });
+});

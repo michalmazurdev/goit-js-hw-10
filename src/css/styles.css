@@ -11,7 +11,9 @@ body {
     rgba(244, 244, 244, 0.9),
     rgba(244, 244, 244, 0.9)
   );
-  background-size: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   color: #212121;
   line-height: 1.5;
 }
@@ -37,4 +39,8 @@ ul {
   margin-bottom: 5px;
   align-items: center;
   gap: 6px;
+}
+button {
+  border: none;
+  background-color: inherit;
 }
